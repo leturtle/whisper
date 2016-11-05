@@ -1,5 +1,5 @@
 # whisper
-a simple web based messaging system
+a simple web based chatting system
 
 ## Dependencies
 先做一些技术选型吧
