@@ -31,7 +31,6 @@ a simple web based chatting system
   auth: {
     username: 'Turtle',
     token: '',
-    password: 'password',
     isRegisterPage: false
   }
 }

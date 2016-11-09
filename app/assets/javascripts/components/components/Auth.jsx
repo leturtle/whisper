@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react'
+import {Component, PropTypes} from 'react'
 import Login from './Login'
 import Register from './Register'
 

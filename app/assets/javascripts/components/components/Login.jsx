@@ -1,12 +1,17 @@
-import React, {Component, PropTypes} from 'react'
+import {Component, PropTypes} from 'react'
 class Login extends Component {
   render() {
-    const {toggleRegister} = this.props.actions
-    return(
+    const {toggleRegister, loginRequest} = this.props.actions
+    return (
       <div>
-        <input type="text" name="username"/>
-        <input type="password" name="password"/>
-        <input type="button" value="login"/>
+        <input type="text" name="username" ref="usernameInput"/>
+        <input type="password" name="password" ref="passwordInput"/>
+        <button onClick={()=> {
+          loginRequest(
+            this.refs.usernameInput.value,
+            this.refs.passwordInput.value)
+        }}>login
+        </button>
         <button onClick={toggleRegister}>register</button>
       </div>
     )

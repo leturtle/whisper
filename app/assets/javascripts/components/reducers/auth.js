@@ -1,4 +1,4 @@
-import {TOGGLE_REGISTER, LOGIN} from '../actions/auth'
+import {TOGGLE_REGISTER, LOGIN, LOGOUT} from '../actions/auth'
 
 const initialState = {
   isRegisterPage: false,
@@ -11,7 +11,12 @@ export default function auth(state = initialState, action) {
     case TOGGLE_REGISTER:
       return Object.assign({}, state, {isRegisterPage: !state.isRegisterPage})
     case LOGIN:
-      return Object.assign({}, state, {token: 'abc'})
+      return Object.assign({}, state, {
+        username: action.payload.username,
+        token: action.payload.token
+      })
+    case LOGOUT:
+      return Object.assign({}, state, {token: ''})
     default:
       return state
   }
