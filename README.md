@@ -14,14 +14,25 @@ a simple web based chatting system
 - 做成 Single Page App，登陆、消息都用 React 进行渲染
 - 除了主页外，Rails 主要用于提供 API 服务
 
+## React Components
+```
+- Whisper
+  - Auth
+    - Login
+    - Register
+  - Chat
+    - Header
+```
+
 ## Redux State Shapes
 
 ```
 {
   auth: {
-    isLogin: false,
     username: 'Turtle',
-    token: ''
+    token: '',
+    password: 'password',
+    isRegisterPage: false
   }
 }
-
+```
