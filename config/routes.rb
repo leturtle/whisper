@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   scope '/api' do
     post 'auth/login'
     post 'auth/register'
+    get 'chat' => 'chat#index'
   end
 
   root 'home#index'

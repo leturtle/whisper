@@ -2,7 +2,7 @@ class ChatController < ActionController::API
   before_action :authenticate_token
 
   def index
-
+    render json: { username: @current_user.username, token: @current_user.persistence_token }
   end
 
 
@@ -10,7 +10,7 @@ class ChatController < ActionController::API
 
   def authenticate_token
     @current_user = authenticate(params[:token])
-    render json: {username: '', token: ''} unless @current_user
+    render json: { username: '', token: '' } unless @current_user
   end
 
   def authenticate(token)

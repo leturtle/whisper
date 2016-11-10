@@ -52,3 +52,13 @@ export function registerRequest(username, password, passwordConfirmation) {
     })
   }
 }
+
+export function chatRequest(token) {
+  return (dispatch) => {
+    return fetch('/api/chat?token=' + token)
+      .then(response => response.json())
+      .then(json => {
+        dispatch(login(json.username, json.token))
+      })
+  }
+}
