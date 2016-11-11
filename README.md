@@ -22,6 +22,13 @@ a simple web based chatting system
     - Register
   - Chat
     - Header
+    - UserList
+      - UserItem
+    - ChatSessionList
+      - ChatSessionItem
+    - ChatSession
+      - Message
+      - ChatForm
 ```
 
 ## Redux State Shapes
@@ -33,5 +40,59 @@ a simple web based chatting system
     token: '',
     isRegisterPage: false
   }
+  chat: {
+    page: '{UserList|ChatSessionList|ChatSession}',
+    sessionsById: {
+      1: {
+        id: 1,
+        userId: 3,
+        username: 'abcd',
+        newMessagesCount: 1,
+        messages: [
+          {
+            isSentFromMe: true,
+            content: 'aa',
+            time: '2016-11-11 00:00:00'
+          }
+        ]
+      }
+    },
+    sessions: [3, 2, 1],
+    users: [
+      {
+        userId: 3,
+        username: 'abcd'
+      }
+    ]
+  }
 }
 ```
+
+## Chat Models
+```
+
+  +------+                               +-------------+
+  | User |                               | ChatSession |
+  +------+                               +-------------+
+     |                                      |        |
+     |          +-----------------+         |        |        +-----------------+
+     |          | UserChatSession |         |        |        | Messages        |
+     |          +-----------------+         |        |        +-----------------+
+     +----------> user_id         |         |        |        | user_id         |
+                | chat_session_id <---------+        +--------> chat_session_id |
+                | last_read_at    |                           |                 |
+                | is_visable      |                           +-----------------+
+                | last_message_at |
+                +-----------------+
+
+```
+
+## Chat Service
+- public
+  - send_message(from_user, to_user, content)
+  - list_chat_sessions(user)
+  - show_chat_session(user_chat_session)
+- internal
+  - create_chat_session(users)
+
+
