@@ -58,6 +58,18 @@ a simple web based chatting system
       }
     },
     sessions: [3, 2, 1],
+    sessionsByUserId: {3: 1},
+    currentSession: {
+      userId: 3,
+      username: 'abcd',
+      messages: [
+        {
+          isSentFromMe: true,
+          content: 'aa',
+          time: '2016-11-11 00:00:00'
+        }
+      ]
+    }
     users: [
       {
         userId: 3,
@@ -92,6 +104,7 @@ a simple web based chatting system
   - send_message(from_user, to_user, content)
   - list_chat_sessions(user)
   - show_chat_session(user_chat_session)
+  - list_users
 - internal
   - create_chat_session(users)
 

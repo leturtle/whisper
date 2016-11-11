@@ -4,9 +4,9 @@ import Auth from './Auth'
 
 class Whisper extends Component {
   render() {
-    const {auth, actions} = this.props
+    const {auth, chat, actions} = this.props
     var childComponent = auth.token ?
-      <Chat username={auth.username} actions={actions}/> :
+      <Chat {...chat} username={auth.username} actions={actions}/> :
       <Auth {...auth} actions={actions}/>
     return childComponent
   }
@@ -14,6 +14,7 @@ class Whisper extends Component {
 
 Whisper.propTypes = {
   auth: PropTypes.object.isRequired,
+  chat: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired
 }
 
