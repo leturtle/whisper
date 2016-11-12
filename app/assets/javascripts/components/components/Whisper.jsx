@@ -6,7 +6,7 @@ class Whisper extends Component {
   render() {
     const {auth, chat, actions} = this.props
     var childComponent = auth.token ?
-      <Chat {...chat} username={auth.username} actions={actions}/> :
+      <Chat {...chat} username={auth.username} token={auth.token} actions={actions}/> :
       <Auth {...auth} actions={actions}/>
     return childComponent
   }

@@ -3,10 +3,19 @@ import UserItem from './UserItem'
 
 class UserList extends Component {
   render() {
-    const {users} = this.props
+    const {token, users, sessionsByUserId, showSessionByUser, showSessionRequest} = this.props
     var items = []
     users.forEach((u) => {
-      items.push(<UserItem userId={u.userId} username={u.username}/>)
+      let onClick = () => {
+        let sessionId = sessionsByUserId.get(u.userId)
+        if (sessionId) {
+          showSessionRequest(token, sessionId)
+        } else {
+          showSessionByUser(u.userId, u.username)
+        }
+      }
+      items.push(<UserItem key={u.userId} userId={u.userId}
+                           username={u.username} onClick={onClick}/>)
     })
     return (
       <ul>{items}</ul>
@@ -15,8 +24,11 @@ class UserList extends Component {
 }
 
 UserList.propTypes = {
+  token: PropTypes.string.isRequired,
   users: PropTypes.array.isRequired,
-  sessionsByUserId: PropTypes.instanceOf(Map).isRequired
+  sessionsByUserId: PropTypes.instanceOf(Map).isRequired,
+  showSessionByUser: PropTypes.func.isRequired,
+  showSessionRequest: PropTypes.func.isRequired
 }
 
 export default UserList

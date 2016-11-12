@@ -3,8 +3,9 @@ export const SHOW_SESSION = 'SHOW_SESSION'
 export const SHOW_SESSION_BY_USER = 'SHOW_SESSION_BY_USER'
 export const LIST_USERS = 'LIST_USERS'
 export const SET_SESSIONS = 'SET_SESSIONS'
-export const SET_CURRENT_SESSION = 'SHOW_SESSION'
+export const SET_CURRENT_SESSION = 'SET_CURRENT_SESSION'
 export const SET_USERS = 'SET_USERS'
+export const INIT_STATE = 'INIT_STATE'
 
 export function listSessions() {
   return {
@@ -64,6 +65,12 @@ export function setUsers(users) {
   }
 }
 
+export function initState() {
+  return {
+    type: INIT_STATE
+  }
+}
+
 export function listSessionsRequest(token) {
   return (dispatch) => {
     dispatch(listSessions())
@@ -75,10 +82,10 @@ export function listSessionsRequest(token) {
   }
 }
 
-export function showSessionRequest(id, token) {
+export function showSessionRequest(token, id) {
   return (dispatch) => {
     dispatch(showSession(id))
-    return fetch('/api/chat/sessions?token=' + token + '&id=' + id)
+    return fetch('/api/chat/sessions/' + id + '?token=' + token)
       .then(response => response.json())
       .then(json => {
         dispatch(setCurrentSession(json.session))
@@ -89,7 +96,7 @@ export function showSessionRequest(id, token) {
 export function listUsersRequest(token) {
   return (dispatch) => {
     dispatch(listUsers())
-    return fetch('/api/chat/sessions?token=' + token)
+    return fetch('/api/chat/users?token=' + token)
       .then(response => response.json())
       .then(json => {
         dispatch(setUsers(json.users))
@@ -97,7 +104,7 @@ export function listUsersRequest(token) {
   }
 }
 
-export function sendMessageResquest(token, userId, content) {
+export function sendMessageRequest(token, userId, content) {
   return (dispatch) => {
     var form = new FormData
     form.append('token', token)
@@ -107,7 +114,7 @@ export function sendMessageResquest(token, userId, content) {
       method: 'POST',
       body: form
     }).then(response => response.json()).then(json => {
-      dispatch(listSessionsRequest(token))
+      dispatch(setCurrentSession(json.session))
     })
   }
 }

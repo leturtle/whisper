@@ -16,7 +16,7 @@ export default function auth(state = initialState, action) {
         token: action.payload.token
       })
     case LOGOUT:
-      return Object.assign({}, state, {token: ''})
+      return initialState
     default:
       return state
   }

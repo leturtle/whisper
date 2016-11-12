@@ -10,7 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161109090811) do
+ActiveRecord::Schema.define(version: 20161111144627) do
+
+  create_table "chat_sessions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "chat_session_id"
+    t.string   "content"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["chat_session_id"], name: "index_messages_on_chat_session_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
+  create_table "user_chat_sessions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "chat_session_id"
+    t.datetime "last_read_at"
+    t.boolean  "is_visible"
+    t.datetime "last_message_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["chat_session_id"], name: "index_user_chat_sessions_on_chat_session_id"
+    t.index ["user_id"], name: "index_user_chat_sessions_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "username"

@@ -1,14 +1,32 @@
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import Whisper from '../components/Whisper'
-import * as Actions from '../actions/auth'
+import * as AuthActions from '../actions/auth'
+import * as ChatActions from '../actions/chat'
 
 function mapStateToProps(state) {
   return state
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators(Actions, dispatch)}
+  var actions = bindActionCreators(
+    Object.assign({}, AuthActions, ChatActions),
+    dispatch
+  )
+  actions.logout = () => {
+    dispatch(AuthActions.logout())
+    dispatch(ChatActions.initState())
+  }
+  actions.loginRequest = (username, password) => {
+    dispatch(dispatch => {
+      let loginRequest = AuthActions.loginRequest(username, password)
+      loginRequest(dispatch).then((token)=> {
+        dispatch(ChatActions.listSessionsRequest(token))
+      })
+    })
+  }
+
+  return {actions: actions}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Whisper)

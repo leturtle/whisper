@@ -64,6 +64,7 @@ a simple web based chatting system
       username: 'abcd',
       messages: [
         {
+          id: 1,
           isSentFromMe: true,
           content: 'aa',
           time: '2016-11-11 00:00:00'
@@ -88,12 +89,12 @@ a simple web based chatting system
   +------+                               +-------------+
      |                                      |        |
      |          +-----------------+         |        |        +-----------------+
-     |          | UserChatSession |         |        |        | Messages        |
+     |          | UserChatSession |         |        |        | Message         |
      |          +-----------------+         |        |        +-----------------+
      +----------> user_id         |         |        |        | user_id         |
                 | chat_session_id <---------+        +--------> chat_session_id |
-                | last_read_at    |                           |                 |
-                | is_visable      |                           +-----------------+
+                | last_read_at    |                           | content         |
+                | is_visible      |                           +-----------------+
                 | last_message_at |
                 +-----------------+
 

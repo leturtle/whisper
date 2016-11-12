@@ -34,6 +34,7 @@ export function loginRequest(username, password) {
       body: form
     }).then(response => response.json()).then(json => {
       dispatch(login(json.username, json.token))
+      return json.token
     })
   }
 }
@@ -49,13 +50,14 @@ export function registerRequest(username, password, passwordConfirmation) {
       body: form
     }).then(response => response.json()).then(json => {
       dispatch(login(json.username, json.token))
+      return json.token
     })
   }
 }
 
-export function chatRequest(token) {
+export function authRequest(token) {
   return (dispatch) => {
-    return fetch('/api/chat?token=' + token)
+    return fetch('/api/auth?token=' + token)
       .then(response => response.json())
       .then(json => {
         dispatch(login(json.username, json.token))

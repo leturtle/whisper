@@ -1,4 +1,4 @@
-import {LIST_SESSIONS, SHOW_SESSION, SHOW_SESSION_BY_USER, LIST_USERS, SET_SESSIONS, SET_CURRENT_SESSION, SET_USERS} from '../actions/chat'
+import {LIST_SESSIONS, SHOW_SESSION, SHOW_SESSION_BY_USER, LIST_USERS, SET_SESSIONS, SET_CURRENT_SESSION, SET_USERS, INIT_STATE} from '../actions/chat'
 
 export const USER_LIST_PAGE = 'UserList'
 export const CHAT_SESSION_LIST_PAGE = 'ChatSessionList'
@@ -56,9 +56,9 @@ export default function (state=initialState, action) {
       })
     case SET_CURRENT_SESSION:
       var session = action.payload.session
-      var sessionsById = Object.assign({}, state.sessionsById)
+      var sessionsById = new Map(state.sessionsById)
       var sessions = Array.from(state.sessions)
-      var sessionsByUserId = Object.assign({}, state.sessionsByUserId)
+      var sessionsByUserId = new Map(state.sessionsByUserId)
       if (!sessionsById.get(session.id)) {
         sessions.unshift[session.id]
         sessionsByUserId.set(session.userId, session.id)
@@ -78,6 +78,8 @@ export default function (state=initialState, action) {
       return Object.assign({}, state, {
         users: action.payload.users
       })
+    case INIT_STATE:
+      return initialState
     default:
       return state
   }

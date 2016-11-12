@@ -13,3 +13,5 @@ Message.propTypes = {
   content: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired
 }
+
+export default Message
