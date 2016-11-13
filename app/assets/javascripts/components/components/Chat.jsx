@@ -12,7 +12,7 @@ class Chat extends Component {
       users, currentSession
     } = this.props
     const {
-      logout, listUsersRequest, showSessionRequest, showSessionByUser,
+      logout, listUsersRequest, showSessionRequest, showSessionByUserRequest,
       sendMessageRequest, listSessionsRequest, hideSessionRequest
     } = this.props.actions
     let childComponent = () => {
@@ -30,7 +30,7 @@ class Chat extends Component {
             users={users}
             sessionsByUserId={sessionsByUserId}
             showSessionRequest={showSessionRequest}
-            showSessionByUser={showSessionByUser}/>
+            showSessionByUserRequest={showSessionByUserRequest}/>
         default:
           return <ChatSessionList
             token={token}

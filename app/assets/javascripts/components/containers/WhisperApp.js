@@ -21,7 +21,9 @@ function mapDispatchToProps(dispatch) {
     dispatch(dispatch => {
       let loginRequest = AuthActions.loginRequest(username, password)
       loginRequest(dispatch).then((token)=> {
-        dispatch(ChatActions.listSessionsRequest(token))
+        if (token) {
+          dispatch(ChatActions.listSessionsRequest(token))
+        }
       })
     })
   }

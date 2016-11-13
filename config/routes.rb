@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     get 'auth', to: 'auth#index'
     get 'chat/sessions', to: 'chat#user_chat_sessions'
     get 'chat/sessions/:id', to: 'chat#user_chat_session'
+    get 'chat/sessions/uid/:uid', to: 'chat#user_chat_session_by_user_id'
     get 'chat/users', to: 'chat#users'
     post 'chat/message', to: 'chat#message'
     delete 'chat/sessions/:id', to: 'chat#hide_user_chat_session'

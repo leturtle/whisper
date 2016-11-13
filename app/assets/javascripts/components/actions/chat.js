@@ -103,6 +103,19 @@ export function showSessionRequest(token, id) {
   }
 }
 
+export function showSessionByUserRequest(token, userId, username) {
+  return (dispatch) => {
+    dispatch(showSessionByUser(userId, username))
+    return fetch('/api/chat/sessions/uid/' + userId + '?token=' + token)
+      .then(response => response.json())
+      .then(json => {
+        if (json.session && json.session.id) {
+          dispatch(setCurrentSession(json.session))
+        }
+      })
+  }
+}
+
 export function listUsersRequest(token) {
   return (dispatch) => {
     dispatch(listUsers())

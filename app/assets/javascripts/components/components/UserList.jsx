@@ -3,7 +3,7 @@ import UserItem from './UserItem'
 
 class UserList extends Component {
   render() {
-    const {token, users, sessionsByUserId, showSessionByUser, showSessionRequest} = this.props
+    const {token, users, sessionsByUserId, showSessionByUserRequest, showSessionRequest} = this.props
     var items = []
     users.forEach((u) => {
       let onClick = () => {
@@ -11,7 +11,7 @@ class UserList extends Component {
         if (sessionId) {
           showSessionRequest(token, sessionId)
         } else {
-          showSessionByUser(u.userId, u.username)
+          showSessionByUserRequest(token, u.userId, u.username)
         }
       }
       items.push(<UserItem key={u.userId} userId={u.userId}
@@ -27,7 +27,7 @@ UserList.propTypes = {
   token: PropTypes.string.isRequired,
   users: PropTypes.array.isRequired,
   sessionsByUserId: PropTypes.instanceOf(Map).isRequired,
-  showSessionByUser: PropTypes.func.isRequired,
+  showSessionByUserRequest: PropTypes.func.isRequired,
   showSessionRequest: PropTypes.func.isRequired
 }
 

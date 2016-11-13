@@ -53,15 +53,15 @@ export default function(state = initialState, action) {
         page: USER_LIST_PAGE
       })
     case SET_SESSIONS:
-      var sessionsById = new Map()
-      var sessionsByUserId = new Map()
+      var sessionsById = new Map(state.sessionsById)
+      var sessionsByUserId = new Map(state.sessionsByUserId)
       action.payload.sessions.forEach(s => {
         sessionsById.set(s.id, s)
         sessionsByUserId.set(s.userId, s.id)
       })
       return Object.assign({}, state, {
         sessionsById: sessionsById,
-        sessions: Array.from(sessionsById.keys()),
+        sessions: action.payload.sessions.map((s) => s.id),
         sessionsByUserId: sessionsByUserId
       })
     case SET_CURRENT_SESSION:

@@ -15,7 +15,18 @@ class ChatController < ActionController::API
   end
 
   def user_chat_session
-    render_user_chat_session(params[:id])
+    render_user_chat_session(UserChatSession.find(params[:id]))
+  end
+
+  def user_chat_session_by_user_id
+    from_user_session_ids = UserChatSession.where(user_id: @current_user.id).map(&:chat_session_id)
+    to_user_session_ids = UserChatSession.where(user_id: params[:uid]).map(&:chat_session_id)
+    session_id = (from_user_session_ids & to_user_session_ids).first
+    if session_id
+      render_user_chat_session(UserChatSession.find(session_id))
+    else
+      render json: { session: {}, username: @current_user.username, token: @current_user.persistence_token }
+    end
   end
 
   def users
@@ -48,7 +59,7 @@ class ChatController < ActionController::API
       user_id: @current_user.id,
       content: params[:content]
     )
-    user_chat_session_id = 0
+    user_chat_session = nil
     session.user_chat_sessions.each do |chat_session|
       chat_session.update(
         last_read_at: now,
@@ -56,10 +67,10 @@ class ChatController < ActionController::API
         last_message_at: now
       )
       if chat_session.user_id == @current_user.id
-        user_chat_session_id = chat_session.id
+        user_chat_session = chat_session
       end
     end
-    render_user_chat_session(user_chat_session_id)
+    render_user_chat_session(user_chat_session)
   end
 
   def hide_user_chat_session
@@ -79,24 +90,26 @@ class ChatController < ActionController::API
     User.find_by(persistence_token: token)
   end
 
-  def render_user_chat_session(id)
-    session = UserChatSession.find(id)
+  def render_user_chat_session(session)
+
     session.update(last_read_at: Time.now)
-    render json: { session: {
-      id: session.id,
-      userId: session.another_user.id,
-      username: session.another_user.username,
-      newMessagesCount: 0,
-      messages: session.messages.map { |message|
-        {
-          id: message.id,
-          isSentFromMe: message.user_id == session.user_id,
-          content: message.content,
-          time: message.created_at.to_s(:db)
+    render json: {
+      session: {
+        id: session.id,
+        userId: session.another_user.id,
+        username: session.another_user.username,
+        newMessagesCount: 0,
+        messages: session.messages.map { |message|
+          {
+            id: message.id,
+            isSentFromMe: message.user_id == session.user_id,
+            content: message.content,
+            time: message.created_at.to_s(:db)
+          }
         }
       },
       username: @current_user.username,
       token: @current_user.persistence_token
-    } }
+    }
   end
 end
