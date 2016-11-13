@@ -7,6 +7,7 @@ export const SET_CURRENT_SESSION = 'SET_CURRENT_SESSION'
 export const SET_USERS = 'SET_USERS'
 export const INIT_STATE = 'INIT_STATE'
 export const HIDE_SESSION = 'HIDE_SESSION'
+export const DELETE_MESSAGE = 'DELETE_MESSAGE'
 
 export function listSessions() {
   return {
@@ -81,6 +82,15 @@ export function hideSession(id) {
   }
 }
 
+export function deleteMessage(id) {
+  return {
+    type: DELETE_MESSAGE,
+    payload: {
+      id: id
+    }
+  }
+}
+
 export function listSessionsRequest(token) {
   return (dispatch) => {
     dispatch(listSessions())
@@ -149,6 +159,18 @@ export function hideSessionRequest(token, id) {
     }).then(response => response.json()).then(json => {
       if (id == json.id) {
         dispatch(hideSession(json.id))
+      }
+    })
+  }
+}
+
+export function deleteMessageRequest(token, id) {
+  return (dispatch) => {
+    return fetch('/api/chat/messages/' + id + '?token=' + token, {
+      method: 'DELETE'
+    }).then(response => response.json()).then(json => {
+      if (id == json.id) {
+        dispatch(deleteMessage(json.id))
       }
     })
   }

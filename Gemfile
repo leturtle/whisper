@@ -34,6 +34,7 @@ gem 'haml-rails'
 gem 'react-rails'
 gem 'browserify-rails'
 gem 'authlogic'
+gem 'acts_as_paranoid'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -7,7 +7,8 @@ import {
   SET_CURRENT_SESSION,
   SET_USERS,
   INIT_STATE,
-  HIDE_SESSION
+  HIDE_SESSION,
+  DELETE_MESSAGE
 } from '../actions/chat'
 
 export const USER_LIST_PAGE = 'UserList'
@@ -82,7 +83,7 @@ export default function(state = initialState, action) {
         },
         sessionsById: sessionsById,
         sessions: sessions,
-        sessionsByUserId, sessionsByUserId
+        sessionsByUserId: sessionsByUserId
       })
     case SET_USERS:
       return Object.assign({}, state, {
@@ -93,6 +94,15 @@ export default function(state = initialState, action) {
     case HIDE_SESSION:
       return Object.assign({}, state, {
         sessions: state.sessions.filter((id) => id != action.payload.id)
+      })
+    case DELETE_MESSAGE:
+      let messages = Array.from(state.currentSession.messages
+        .filter((m)=>m.id != action.payload.id))
+      let currentSession = Object.assign({}, state.currentSession, {
+        messages: messages
+      })
+      return Object.assign({}, state, {
+        currentSession: currentSession
       })
     default:
       return state

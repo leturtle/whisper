@@ -79,6 +79,12 @@ class ChatController < ActionController::API
     render json: { id: session.try(:id).to_i, username: @current_user.username, token: @current_user.persistence_token }
   end
 
+  def delete_message
+    message = Message.find_by(id: params[:id], user_id: @current_user.id)
+    message.delete if message
+    render json: { id: message.try(:id).to_i, username: @current_user.username, token: @current_user.persistence_token }
+  end
+
   private
 
   def authenticate_token
