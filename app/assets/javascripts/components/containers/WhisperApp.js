@@ -14,6 +14,7 @@ function mapDispatchToProps(dispatch) {
     dispatch
   )
   actions.logout = () => {
+    dispatch(ChatActions.closeSocket())
     dispatch(AuthActions.logout())
     dispatch(ChatActions.initState())
   }

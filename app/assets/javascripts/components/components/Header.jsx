@@ -4,14 +4,19 @@ import {CHAT_SESSION_LIST_PAGE} from '../reducers/chat'
 class Header extends Component {
   render() {
     const {username, token, page, logout, listUsersRequest, listSessionsRequest} = this.props
-    let listButton = page == CHAT_SESSION_LIST_PAGE ?
-      <button onClick={()=>{listUsersRequest(token)}}>users</button>:
-      <button onClick={()=>{listSessionsRequest(token)}}>sessions</button>
+    let sessionListButton = <button onClick={()=> {
+      listSessionsRequest(token)
+    }}>sessions</button>
+    let userListButton = page == CHAT_SESSION_LIST_PAGE ?
+      <button onClick={()=> {
+        listUsersRequest(token)
+      }}>users</button> : ''
     return (
       <header>
         <div>{username}</div>
         <button onClick={logout}>logout</button>
-        {listButton}
+        {sessionListButton}
+        {userListButton}
       </header>
     )
   }

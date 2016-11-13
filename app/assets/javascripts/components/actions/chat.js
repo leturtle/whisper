@@ -10,6 +10,8 @@ export const SET_USERS = 'SET_USERS'
 export const INIT_STATE = 'INIT_STATE'
 export const HIDE_SESSION = 'HIDE_SESSION'
 export const DELETE_MESSAGE = 'DELETE_MESSAGE'
+export const ESTABLISH_SOCKET = 'ESTABLISH_SOCKET'
+export const CLOSE_SOCKET = 'CLOSE_SOCKET'
 
 export function listSessions() {
   return {
@@ -90,6 +92,19 @@ export function deleteMessage(id) {
     payload: {
       id: id
     }
+  }
+}
+
+export function establishSocket(subscription) {
+  return {
+    type: ESTABLISH_SOCKET,
+    payload: subscription
+  }
+}
+
+export function closeSocket() {
+  return {
+    type: CLOSE_SOCKET,
   }
 }
 

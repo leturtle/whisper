@@ -8,7 +8,10 @@ import {
   SET_USERS,
   INIT_STATE,
   HIDE_SESSION,
-  DELETE_MESSAGE
+  DELETE_MESSAGE,
+  ESTABLISH_SOCKET,
+  CLOSE_SOCKET,
+  NOTIFY_NEW_MESSAGE
 } from '../actions/chat'
 
 export const USER_LIST_PAGE = 'UserList'
@@ -16,6 +19,9 @@ export const CHAT_SESSION_LIST_PAGE = 'ChatSessionList'
 export const CHAT_SESSION_PAGE = 'ChatSession'
 
 const initialState = {
+  socket: null,
+  socketEstablished: false,
+  hasNewMessage: false,
   page: CHAT_SESSION_LIST_PAGE,
   sessionsById: new Map(),
   sessions: [],
@@ -35,6 +41,7 @@ export default function(state = initialState, action) {
       return Object.assign({}, state, {
         page: CHAT_SESSION_PAGE,
         currentSession: {
+          id: session.id,
           userId: session.userId,
           username: session.username,
           messages: session.messages
@@ -44,6 +51,7 @@ export default function(state = initialState, action) {
       return Object.assign({}, state, {
         page: CHAT_SESSION_PAGE,
         currentSession: {
+          id: 0,
           userId: action.payload.userId,
           username: action.payload.username,
           messages: []
@@ -56,14 +64,19 @@ export default function(state = initialState, action) {
     case SET_SESSIONS:
       var sessionsById = new Map(state.sessionsById)
       var sessionsByUserId = new Map(state.sessionsByUserId)
+      var hasNewMessage = false
       action.payload.sessions.forEach(s => {
         sessionsById.set(s.id, s)
         sessionsByUserId.set(s.userId, s.id)
+        if (s.newMessagesCount && s.newMessagesCount > 0) {
+          hasNewMessage = true
+        }
       })
       return Object.assign({}, state, {
         sessionsById: sessionsById,
         sessions: action.payload.sessions.map((s) => s.id),
-        sessionsByUserId: sessionsByUserId
+        sessionsByUserId: sessionsByUserId,
+        hasNewMessage: hasNewMessage
       })
     case SET_CURRENT_SESSION:
       var session = action.payload.session
@@ -77,6 +90,7 @@ export default function(state = initialState, action) {
       sessionsById.set(session.id, session)
       return Object.assign({}, state, {
         currentSession: {
+          id: session.id,
           userId: session.userId,
           username: session.username,
           messages: session.messages
@@ -103,6 +117,19 @@ export default function(state = initialState, action) {
       })
       return Object.assign({}, state, {
         currentSession: currentSession
+      })
+    case ESTABLISH_SOCKET:
+      return Object.assign({}, state, {
+        socket: action.payload,
+        socketEstablished: true
+      })
+    case CLOSE_SOCKET:
+      return Object.assign({}, state, {
+        socketEstablished: false
+      })
+    case NOTIFY_NEW_MESSAGE:
+      return Object.assign({}, state, {
+        hasNewMessage: true
       })
     default:
       return state

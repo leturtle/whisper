@@ -61,13 +61,20 @@ class ChatController < ActionController::API
     )
     user_chat_session = nil
     session.user_chat_sessions.each do |chat_session|
-      chat_session.update(
-        last_read_at: now,
-        is_visible: true,
-        last_message_at: now
-      )
       if chat_session.user_id == @current_user.id
+        chat_session.update(
+          last_read_at: now,
+          is_visible: true,
+          last_message_at: now
+        )
         user_chat_session = chat_session
+      end
+      if chat_session.user_id == params[:userId].to_i
+        chat_session.update(
+          is_visible: true,
+          last_message_at: now
+        )
+        ChatChannel.broadcast_to(chat_session.user_id, id: chat_session.id)
       end
     end
     render_user_chat_session(user_chat_session)
@@ -97,7 +104,6 @@ class ChatController < ActionController::API
   end
 
   def render_user_chat_session(session)
-
     session.update(last_read_at: Time.now)
     render json: {
       session: {
