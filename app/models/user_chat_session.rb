@@ -9,6 +9,11 @@ class UserChatSession < ApplicationRecord
   end
 
   def new_messages_count
-    messages.where('user_id <> ? AND created_at > ?', user_id, last_read_at).count
+    if last_read_at
+      messages.where('user_id <> ? AND created_at > ?', user_id, last_read_at).count
+    else
+      messages.where('user_id <> ?', user_id).count
+    end
+
   end
 end

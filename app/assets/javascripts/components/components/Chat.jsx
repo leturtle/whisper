@@ -46,7 +46,9 @@ class Chat extends Component {
         <Header username={username} token={token} logout={logout} page={page}
                 listUsersRequest={listUsersRequest}
                 listSessionsRequest={listSessionsRequest}/>
-        {childComponent()}
+        <div style={{height: '400px'}}>
+          {childComponent()}
+        </div>
       </div>
     )
   }

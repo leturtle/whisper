@@ -16,4 +16,6 @@
 //= require react_ujs
 //= require cable.js
 //= require components
+//= require tether.min
+//= require bootstrap.min
 

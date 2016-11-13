@@ -3,15 +3,23 @@ import Message from './Message'
 import ChatForm from './ChatForm'
 
 class ChatSession extends Component {
+
+  componentDidUpdate() {
+    const node = this.refs.messageList
+    node.scrollTop = node.scrollHeight
+  }
+
   render() {
-    const {token, userId, messages, sendMessageRequest, deleteMessageRequest} = this.props
+    const {token, username, userId, messages, sendMessageRequest, deleteMessageRequest} = this.props
     var items = []
     messages.forEach((m) => {
-      items.push(<Message key={m.id} {...m} token={token} deleteMessageRequest={deleteMessageRequest}/>)
+      items.push(<Message key={m.id} {...m} token={token} username={username}
+                          deleteMessageRequest={deleteMessageRequest}/>)
     })
     return (
-      <div>
-        <ul>{items}</ul>
+      <div style={{height: '100%'}}>
+        <ul className="list-group" style={{overflow: 'scroll', height: '100%'}}
+            ref="messageList">{items}</ul>
         <ChatForm token={token} userId={userId}
                   sendMessageRequest={sendMessageRequest}/>
       </div>

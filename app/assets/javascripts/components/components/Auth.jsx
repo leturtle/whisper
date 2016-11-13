@@ -8,7 +8,14 @@ class Auth extends Component {
     var childComponent = isRegisterPage ?
       <Register actions={actions}/> :
       <Login actions={actions}/>
-    return childComponent
+    return (
+      <div>
+        <nav className="navbar navbar-light bg-faded">
+          <a className="navbar-brand" href="">Whisper</a>
+        </nav>
+        {childComponent}
+      </div>
+    )
   }
 }
 

@@ -7,9 +7,19 @@ class ChatSessionItem extends Component {
       e.stopPropagation()
       hideSessionRequest(token, id)
     }
-    const hideButton = <button onClick={onHideButtonClick}>hide</button>
+    const newMessageCountTag = newMessagesCount > 0 ?
+      <span className="tag tag-pill tag-success float-xs-right" style={{marginRight: '20px'}}>
+        {newMessagesCount}
+      </span> : ''
+    const hideButton = <button className="close"
+                               onClick={onHideButtonClick}>&times;</button>
     return (
-      <li onClick={() => showSessionRequest(token, id)}>{username}<b>{newMessagesCount}</b>{hideButton}</li>
+      <li className="list-group-item list-group-item-action"
+          onClick={() => showSessionRequest(token, id)}>
+        {username}
+        {hideButton}
+        {newMessageCountTag}
+      </li>
     )
   }
 }

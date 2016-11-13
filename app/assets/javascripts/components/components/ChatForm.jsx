@@ -3,17 +3,27 @@ import {Component, PropTypes} from 'react'
 class ChatForm extends Component {
   render() {
     const {token, userId, sendMessageRequest} = this.props
-    let onClick = () => {
-      sendMessageRequest(token, userId, this.refs.contentInput.value)
-      this.refs.contentInput.value = ''
+    const onClick = () => {
+      const content = this.refs.contentInput.value
+      if (content) {
+        sendMessageRequest(token, userId, content)
+        this.refs.contentInput.value = ''
+      }
+    }
+    const onKeyUp = (e) => {
+      if (e.key == 'Enter') {
+        onClick()
+      }
     }
     return (
-      <div>
-        <input type="text" name="content" ref="contentInput"/>
-        <button
-          onClick={onClick}>
-          send
-        </button>
+      <div className="input-group input-group-lg btn-block">
+        <input className="form-control" type="text" name="content"
+               ref="contentInput" onKeyUp={onKeyUp}/>
+        <span className="input-group-btn">
+            <button className="btn btn-outline-success"
+                    onClick={onClick}
+            >Send</button>
+        </span>
       </div>
     )
   }

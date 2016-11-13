@@ -3,7 +3,7 @@ import {Component, PropTypes} from 'react'
 class UserItem extends Component {
   render() {
     return (
-      <li onClick={this.props.onClick}>{this.props.username}</li>
+      <li className="list-group-item list-group-item-action" onClick={this.props.onClick}>{this.props.username}</li>
     )
   }
 }

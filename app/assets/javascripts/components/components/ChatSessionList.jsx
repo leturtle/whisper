@@ -15,7 +15,7 @@ class ChatSessionList extends Component {
         {...session}/>)
     })
     return (
-      <ul>{items}</ul>
+      <ul className="list-group" style={{overflow: 'scroll', height: '100%'}}>{items}</ul>
     )
   }
 }
