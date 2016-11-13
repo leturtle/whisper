@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     get 'chat/sessions/:id', to: 'chat#user_chat_session'
     get 'chat/users', to: 'chat#users'
     post 'chat/message', to: 'chat#message'
+    delete 'chat/sessions/:id', to: 'chat#hide_user_chat_session'
   end
 
   root 'home#index'

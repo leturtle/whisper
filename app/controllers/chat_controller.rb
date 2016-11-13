@@ -2,7 +2,7 @@ class ChatController < ActionController::API
   before_action :authenticate_token
 
   def user_chat_sessions
-    sessions = UserChatSession.where(user_id: @current_user.id).order(last_message_at: :desc).map do |session|
+    sessions = UserChatSession.where(user_id: @current_user.id, is_visible: true).order(last_message_at: :desc).map do |session|
       {
         id: session.id,
         userId: session.another_user.id,
@@ -60,6 +60,12 @@ class ChatController < ActionController::API
       end
     end
     render_user_chat_session(user_chat_session_id)
+  end
+
+  def hide_user_chat_session
+    session = UserChatSession.find_by(id: params[:id], user_id: @current_user.id)
+    session.update(is_visible: false) if session
+    render json: { id: session.try(:id).to_i, username: @current_user.username, token: @current_user.persistence_token }
   end
 
   private

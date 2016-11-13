@@ -13,7 +13,7 @@ class Chat extends Component {
     } = this.props
     const {
       logout, listUsersRequest, showSessionRequest, showSessionByUser,
-      sendMessageRequest, listSessionsRequest
+      sendMessageRequest, listSessionsRequest, hideSessionRequest
     } = this.props.actions
     let childComponent = () => {
       switch (page) {
@@ -36,7 +36,8 @@ class Chat extends Component {
             token={token}
             sessionsById={sessionsById}
             sessions={sessions}
-            showSessionRequest={showSessionRequest}/>
+            showSessionRequest={showSessionRequest}
+            hideSessionRequest={hideSessionRequest}/>
       }
     }
     return (

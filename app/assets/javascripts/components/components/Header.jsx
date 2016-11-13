@@ -1,5 +1,5 @@
 import {Component, PropTypes} from 'react'
-import {USER_LIST_PAGE, CHAT_SESSION_LIST_PAGE, CHAT_SESSION_PAGE} from '../reducers/chat'
+import {CHAT_SESSION_LIST_PAGE} from '../reducers/chat'
 
 class Header extends Component {
   render() {

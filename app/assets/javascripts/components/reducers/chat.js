@@ -1,4 +1,14 @@
-import {LIST_SESSIONS, SHOW_SESSION, SHOW_SESSION_BY_USER, LIST_USERS, SET_SESSIONS, SET_CURRENT_SESSION, SET_USERS, INIT_STATE} from '../actions/chat'
+import {
+  LIST_SESSIONS,
+  SHOW_SESSION,
+  SHOW_SESSION_BY_USER,
+  LIST_USERS,
+  SET_SESSIONS,
+  SET_CURRENT_SESSION,
+  SET_USERS,
+  INIT_STATE,
+  HIDE_SESSION
+} from '../actions/chat'
 
 export const USER_LIST_PAGE = 'UserList'
 export const CHAT_SESSION_LIST_PAGE = 'ChatSessionList'
@@ -13,7 +23,7 @@ const initialState = {
   users: []
 }
 
-export default function (state=initialState, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case LIST_SESSIONS:
       return Object.assign({}, state, {
@@ -80,6 +90,10 @@ export default function (state=initialState, action) {
       })
     case INIT_STATE:
       return initialState
+    case HIDE_SESSION:
+      return Object.assign({}, state, {
+        sessions: state.sessions.filter((id) => id != action.payload.id)
+      })
     default:
       return state
   }

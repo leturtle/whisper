@@ -6,6 +6,7 @@ export const SET_SESSIONS = 'SET_SESSIONS'
 export const SET_CURRENT_SESSION = 'SET_CURRENT_SESSION'
 export const SET_USERS = 'SET_USERS'
 export const INIT_STATE = 'INIT_STATE'
+export const HIDE_SESSION = 'HIDE_SESSION'
 
 export function listSessions() {
   return {
@@ -71,6 +72,15 @@ export function initState() {
   }
 }
 
+export function hideSession(id) {
+  return {
+    type: HIDE_SESSION,
+    payload: {
+      id: id
+    }
+  }
+}
+
 export function listSessionsRequest(token) {
   return (dispatch) => {
     dispatch(listSessions())
@@ -115,6 +125,18 @@ export function sendMessageRequest(token, userId, content) {
       body: form
     }).then(response => response.json()).then(json => {
       dispatch(setCurrentSession(json.session))
+    })
+  }
+}
+
+export function hideSessionRequest(token, id) {
+  return (dispatch) => {
+    return fetch('/api/chat/sessions/' + id + '?token=' + token, {
+      method: 'DELETE'
+    }).then(response => response.json()).then(json => {
+      if (id == json.id) {
+        dispatch(hideSession(json.id))
+      }
     })
   }
 }
