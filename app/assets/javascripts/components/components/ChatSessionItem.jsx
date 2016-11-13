@@ -2,14 +2,14 @@ import {Component, PropTypes} from 'react'
 
 class ChatSessionItem extends Component {
   render() {
-    const {token, id, username, showSessionRequest, hideSessionRequest} = this.props
+    const {token, id, username, showSessionRequest, hideSessionRequest, newMessagesCount} = this.props
     const onHideButtonClick = (e) => {
       e.stopPropagation()
       hideSessionRequest(token, id)
     }
     const hideButton = <button onClick={onHideButtonClick}>hide</button>
     return (
-      <li onClick={() => showSessionRequest(token, id)}>{username}{hideButton}</li>
+      <li onClick={() => showSessionRequest(token, id)}>{username}<b>{newMessagesCount}</b>{hideButton}</li>
     )
   }
 }

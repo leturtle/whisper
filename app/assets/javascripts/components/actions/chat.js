@@ -1,3 +1,5 @@
+import 'whatwg-fetch'
+
 export const LIST_SESSIONS = 'LIST_SESSIONS'
 export const SHOW_SESSION = 'SHOW_SESSION'
 export const SHOW_SESSION_BY_USER = 'SHOW_SESSION_BY_USER'

@@ -1,3 +1,5 @@
+import 'whatwg-fetch'
+
 export const TOGGLE_REGISTER = 'TOGGLE_REGISTER'
 export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
