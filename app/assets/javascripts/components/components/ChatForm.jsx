@@ -18,7 +18,7 @@ class ChatForm extends Component {
     return (
       <div className="input-group input-group-lg btn-block">
         <input className="form-control" type="text" name="content"
-               ref="contentInput" onKeyUp={onKeyUp}/>
+               ref="contentInput" onKeyUp={onKeyUp} autoComplete={false}/>
         <span className="input-group-btn">
             <button className="btn btn-outline-success"
                     onClick={onClick}

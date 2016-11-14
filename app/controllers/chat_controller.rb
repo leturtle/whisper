@@ -2,7 +2,7 @@ class ChatController < ActionController::API
   before_action :authenticate_token
 
   def user_chat_sessions
-    sessions = UserChatSession.where(user_id: @current_user.id, is_visible: true).order(last_message_at: :desc).map do |session|
+    sessions = UserChatSession.visible_by_user(@current_user.id).map do |session|
       {
         id: session.id,
         userId: session.another_user.id,
@@ -11,7 +11,7 @@ class ChatController < ActionController::API
         messages: []
       }
     end
-    render json: { sessions: sessions, username: @current_user.username, token: @current_user.persistence_token }
+    render_with_authentication(sessions: sessions)
   end
 
   def user_chat_session
@@ -19,13 +19,11 @@ class ChatController < ActionController::API
   end
 
   def user_chat_session_by_user_id
-    from_user_session_ids = UserChatSession.where(user_id: @current_user.id).map(&:chat_session_id)
-    to_user_session_ids = UserChatSession.where(user_id: params[:uid]).map(&:chat_session_id)
-    session_id = (from_user_session_ids & to_user_session_ids).first
-    if session_id
-      render_user_chat_session(UserChatSession.find(session_id))
+    chat_session_id = UserChatSession.chat_session_id_between(@current_user.id, params[:uid])
+    if chat_session_id
+      render_user_chat_session(UserChatSession.find_by(chat_session_id: session_id, user_id: @current_user.id))
     else
-      render json: { session: {}, username: @current_user.username, token: @current_user.persistence_token }
+      render_with_authentication(session: {})
     end
   end
 
@@ -36,60 +34,24 @@ class ChatController < ActionController::API
         username: user.username
       }
     end
-    render json: { users: users, username: @current_user.username, token: @current_user.persistence_token }
+    render_with_authentication(users: users)
   end
 
   def message
-    from_user_session_ids = UserChatSession.where(user_id: @current_user.id).map(&:chat_session_id)
-    to_user_session_ids = UserChatSession.where(user_id: params[:userId]).map(&:chat_session_id)
-    session_id = (from_user_session_ids & to_user_session_ids).first
-    now = Time.now
-    if session_id
-      session = ChatSession.find(session_id)
-    else
-      session = ChatSession.create
-      session.user_chat_sessions.create(
-        user_id: @current_user.id,
-      )
-      session.user_chat_sessions.create(
-        user_id: params[:userId]
-      )
-    end
-    session.messages.create(
-      user_id: @current_user.id,
-      content: params[:content]
-    )
-    user_chat_session = nil
-    session.user_chat_sessions.each do |chat_session|
-      if chat_session.user_id == @current_user.id
-        chat_session.update(
-          last_read_at: now,
-          is_visible: true,
-          last_message_at: now
-        )
-        user_chat_session = chat_session
-      end
-      if chat_session.user_id == params[:userId].to_i
-        chat_session.update(
-          is_visible: true,
-          last_message_at: now
-        )
-        ChatChannel.broadcast_to(chat_session.user_id, id: chat_session.id)
-      end
-    end
+    user_chat_session = SendMessageService.new.call(@current_user.id, params[:userId].to_i, params[:content])
     render_user_chat_session(user_chat_session)
   end
 
   def hide_user_chat_session
     session = UserChatSession.find_by(id: params[:id], user_id: @current_user.id)
     session.update(is_visible: false) if session
-    render json: { id: session.try(:id).to_i, username: @current_user.username, token: @current_user.persistence_token }
+    render_with_authentication(id: session.try(:id).to_i)
   end
 
   def delete_message
     message = Message.find_by(id: params[:id], user_id: @current_user.id)
     message.delete if message
-    render json: { id: message.try(:id).to_i, username: @current_user.username, token: @current_user.persistence_token }
+    render_with_authentication(id: message.try(:id).to_i)
   end
 
   private
@@ -105,7 +67,7 @@ class ChatController < ActionController::API
 
   def render_user_chat_session(session)
     session.update(last_read_at: Time.now)
-    render json: {
+    render_with_authentication(
       session: {
         id: session.id,
         userId: session.another_user.id,
@@ -119,9 +81,11 @@ class ChatController < ActionController::API
             time: message.created_at.to_s(:db)
           }
         }
-      },
-      username: @current_user.username,
-      token: @current_user.persistence_token
-    }
+      }
+    )
+  end
+
+  def render_with_authentication(result)
+    render json: { username: @current_user.username, token: @current_user.persistence_token }.merge(result)
   end
 end
