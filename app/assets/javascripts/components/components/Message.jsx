@@ -7,13 +7,19 @@ class Message extends Component {
       this.props.deleteMessageRequest(this.props.token, this.props.id)
     }
     const item = this.props.isSentFromMe ?
-      <li className="list-group-item list-group-item-action text-xs-right">
-        {this.props.content}
-        <button className="close" onClick={onDeleteButtonClick}>&times;</button>
+      <li className="list-group-item text-xs-right" style={{border:'none;'}}>
+        <h4>
+          <span className="tag tag-pill tag-primary">{this.props.content}</span>
+          <button className="close" onClick={onDeleteButtonClick}>&times;</button>
+        </h4>
       </li> :
-      <li className="list-group-item list-group-item-action">
-        {this.props.username}:
-        {this.props.content}
+      <li className="list-group-item" style={{border: 'none;'}}>
+        <h4>
+          {this.props.username}:
+          <span className="tag tag-pill tag-default" style={{marginLeft:'5px'}}>
+            {this.props.content}
+          </span>
+        </h4>
       </li>
     return item
   }
